@@ -17,6 +17,12 @@ const SwaggerUI = require("swagger-ui-express");
 const { PostSchema, UserSchema } = require("./model/dbschema");
 
 
+/**
+ * importing PendingPosts method
+ */
+const { PendingPosts } = require("./model/pendingpost");
+
+
 
 
 
@@ -137,13 +143,24 @@ let loggedIn = adminid; //loggedIn variable stores which type of user(** I have 
 
 
 
-let port = process.env.PORT;
+/**
+ * "process.env.PORT" automatically detects the allocated port number from the online hosted server
+ */
+let port = process.env.PORT; //port variable stores the port number to listen to requests
 if (port == null || port == "") {
-    port = 9000;
+    port = 9000; //assigning "9000" as the port number for local server
 }
+
+/**
+ * App is listening to the specified port number
+ */
 App.listen(port, () => {
     console.log("server started successfully");
 });
+
+
+
+
 
 
 /**
@@ -155,7 +172,11 @@ App.listen(port, () => {
  *    '200':
  *      description: A successful request and redirect to PendingBlogs Panel
 */
-App.get("/admin", function (req, res) {
+
+/**
+ * If any get request from "/admin" then redirect to "/admin/PendingBlogs"
+ */
+App.get("/admin", (req, res) => {
     if (loggedIn == adminid) res.redirect("/admin/PendingBlogs");
 });
 
@@ -172,18 +193,8 @@ App.get("/admin", function (req, res) {
  *          name: data
  *          type: array
 */
-App.get("/admin/:type", function (req, res) {
-    let panel = "PendingBlogs";
-    if (loggedIn == adminid) {
-            PendingPost.find({}, function (err, posts) {
-                if (!err) {
-                    res.render("admin", {
-                        selectedPanel: panel,
-                        data: posts
-                    });
-                }
-            });
-    }
+App.get("/admin/:type", (req, res) => {
+    if (loggedIn == adminid) PendingPosts(); //Renders all the pending posts
 });
 
 /**
