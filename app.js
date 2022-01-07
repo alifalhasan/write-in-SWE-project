@@ -1,16 +1,34 @@
+/* All the required modules are here */
+
 const Express = require("express");
-const BodyParser = require("body-parser");
 const Mongoose = require("mongoose");
-const express = require("express");
+const BodyParser = require("body-parser");
 const SwaggerJSDoc = require("swagger-jsdoc");
 const SwaggerUI = require("swagger-ui-express");
+
+/* Required modules end here */
+
+
+
+
+/**
+ * Requiring Database Schema from model part
+ */
 const { PostSchema, UserSchema } = require("./model/dbschema");
-const swaggerJSDoc = require("swagger-jsdoc");
+
+
+
+
+
+
+/**
+ * Swagger Specification is defined here
+ */
 const SwaggerSpec = {
     swaggerDefinition: {
         info: {
-            title: "Admin API",
-            description: "Admin API Interface",
+            title: "Admin Post Approval API",
+            description: "Admin Post Approval API Interface",
             contact: {
                 name: "Alif Al Hasan"
             },
@@ -20,35 +38,110 @@ const SwaggerSpec = {
     apis: ["app.js"]
 };
 
+
+
+
+
+
+/**
+ * App is an object where Express() method puts new Express application (to start a new Express application)
+ */
 const App = Express();
 
+
+
+
+
+/**
+ * Setting EJS(Embedded JS) as default view engine so that ejs files can be rendered
+ */
 App.set("view-engine", "ejs");
 
-App.use(express.static("public"));
+
+
+
+
+
+/**
+ * Telling App to use express.json() which is a method inbuilt in express to recognize the incoming Request Object as a JSON Object
+ */
+App.use(Express.json());
+
+
+
+
+
+
+
+/**
+ * Telling App that static files reside in public folder
+ */
+App.use(Express.static("public"));
+
+
+
+
+
+
+
+/**
+ *  Telling to use Body-Parser to convert text-based JSON input into JS based variable from URL-encoded requests. The "extended:true" precises that the req.body object will contain values of any type instead of just strings.
+ */
 App.use(BodyParser.urlencoded({extended:true}));
 
-App.use(express.json());
+
+
+
+
+
+
+
+/**
+ * "localhost:9000/api-doc" will contain the api documentation
+ */
 App.use("/api-doc", SwaggerUI.serve, SwaggerUI.setup(SwaggerJSDoc(SwaggerSpec)));
 
+
+
+
+
+
+
+
+/**
+ * Connectiong to database using mongoose
+ */
 Mongoose.connect('mongodb+srv://write-in:write-in88@cluster0.vchqj.mongodb.net/blogDB', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 
-const PostSchema_ = PostSchema();
-const UserSchema_ = UserSchema();
-const Post = Mongoose.model("Post", PostSchema_);
-const User = Mongoose.model("User", UserSchema_);
-const PendingPost = Mongoose.model("PendingPost", PostSchema_);
 
-let adminid = "admin@gmail.com";
-let loggedIn = adminid;
+
+
+
+/**
+ * Database schemas stored in constants
+ */
+const Post = Mongoose.model("Post", PostSchema);
+const User = Mongoose.model("User", UserSchema);
+const PendingPost = Mongoose.model("PendingPost", PostSchema);
+
+
+
+
+let adminid = "admin@gmail.com"; //adminid variable stores admin's email
+let loggedIn = adminid; //loggedIn variable stores which type of user(** I have initialized it with adminid)
+
+
+
+
 
 let port = process.env.PORT;
 if (port == null || port == "") {
-    port = 3000;
+    port = 9000;
 }
-App.listen(port, function () {
+App.listen(port, () => {
     console.log("server started successfully");
 });
 
