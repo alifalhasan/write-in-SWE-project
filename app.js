@@ -29,6 +29,18 @@ const { PendingPosts } = require("./model/pendingpost");
 const { PublishPost } = require("./model/publishpost");
 
 
+/**
+ * importing RejectPost method
+ */
+const { RejectPost } = require("./model/rejectpost");
+
+
+/**
+ * importing OpenPost method
+ */
+const { OpenPost } = require("./model/openpost");
+
+
 
 
 
@@ -220,16 +232,9 @@ App.post("/admin/PendingBlogsPublish", (req, res) => {
  *  post:
  *   description: Used to Reject a pending blog
 */
-App.post("/admin/PendingBlogsReject", function (req, res) {
-    const id = req.body.rejectBtn;
-    PendingPost.deleteOne({
-        _id: id
-    }, function (err) {
-        if (!err) console.log("deleted");
-        else console.log(err);
-    });
+App.post("/admin/PendingBlogsReject", (req, res) => {
+    RejectPost();
     res.redirect("/admin");
-
 });
 
 /**
@@ -238,16 +243,6 @@ App.post("/admin/PendingBlogsReject", function (req, res) {
  *  post:
  *   description: Used to Open a pending blog
 */
-App.post("/admin/PendingBlogsOpen", function (req, res) {
-    const id = req.body.openBtn;
-    PendingPost.find({
-        _id: id
-    }, function (err, posts) {
-        if (!err) {
-            const post = posts[0];
-            res.render("open_pending_blog", {
-                post: post
-            });
-        }
-    });
+App.post("/admin/PendingBlogsOpen", (req, res) => {
+    OpenPost();
 });
