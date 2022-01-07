@@ -23,6 +23,12 @@ const { PostSchema, UserSchema } = require("./model/dbschema");
 const { PendingPosts } = require("./model/pendingpost");
 
 
+/**
+ * importing PublishPost method
+ */
+const { PublishPost } = require("./model/publishpost");
+
+
 
 
 
@@ -203,34 +209,9 @@ App.get("/admin/:type", (req, res) => {
  *  post:
  *   description: Used to Publish pending blogs
 */
-App.post("/admin/PendingBlogsPublish", function (req, res) {
-    const id = req.body.publishBtn;
-    PendingPost.find({
-        _id: id
-    }, function (err, posts) {
-        if (!err) {
-            const post = posts[0];
-            PendingPost.deleteOne({
-                _id: post._id
-            }, function (err) {
-                if (err) {
-                    console.log("not deleted!!", err);
-                } else console.log("successful deletion");
-            });
-            Post.create({
-                title: post.title,
-                content: post.content,
-                tag: post.tag,
-                time: post.time,
-                author: post.author
-            }, function (err, data) {
-                if (!err) {
-                    console.log("saved to post", data);
-                } else console.log("not saved!!", err);
-            });
-        } else console.log(err);
-    });
-    res.redirect("/admin");
+App.post("/admin/PendingBlogsPublish", (req, res) => {
+    PublishPost(); //Publishes a selected post
+    res.redirect("/admin"); //redirecting to the admin panel
 });
 
 /**
