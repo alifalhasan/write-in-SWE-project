@@ -1,77 +1,37 @@
-//---------//
-//includes//
-//--------//
-const express = require("express");
-const bodyParser = require("body-parser");
-const ejs = require("ejs");
-//const _ = require("lodash");
-const mongoose = require("mongoose");
-const date = require("dateformat");
-const validator = require("validator");
-const schema = require(__dirname+"/model/schema.js");//*
-let loggedIn = "mehedi@gmail.com";
-const adminid = "admin@gmail.com",
-    adminpass = "admin123321";
+const Express = require("express");
+const BodyParser = require("body-parser");
+const Ejs = require("ejs");
+const Schema = require(__dirname+"/model/schema.js");//*
+const Date = require(__dirname+"/utility/date.js");
+const LoggedIn = "mehedi@gmail.com";
+const AdminId = "admin@gmail.com",AdminPass = "admin123321";
+
+const App = Express();
 
 
-//-----------------//
-//uses of includes//
-//----------------//
-const app = express();
+App.set('view engine', 'ejs');
 
-
-app.set('view engine', 'ejs');
-
-app.use(bodyParser.urlencoded({
+App.use(BodyParser.urlencoded({
     extended: true
 }));
 
-app.use(express.static("public")); // give express access of the folder named "public"
+App.use(Express.static("public")); // give express access of the folder named "public"
 
-//mongoose.connect("mongodb://localhost:27017/blogDB",{
-//    useNewUrlParser:true
-//});
-
-
-//-------------------//
-//User defined method//
-//-------------------//
-function getdate() {
-    return date("dd mmmm yyyy");
-}
-
-function setCur() {
-    const time = [];
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const thisMonth = Number(date("m"));
-    const thisYear = Number(date("yyyy"));
-    for (let i = thisMonth - 1; i >= 0; i--) {
-        time.push(months[i] + " " + thisYear);
-    }
-    return time;
-}
-
-function setPast() {
-    const time = [];
-    const thisYear = Number(date("yyyy"));
-    for (let i = thisYear - 1; i > 2016; i--) time.push(i);
-    return time;
-}
 //databse and model
-const PendingPost=schema.getPendingPostModel();
-const Post=schema.getPostModel();
-const User=schema.getUserModel();
+const PendingPost=Schema.GetPendingPostModel();
+const Post=Schema.GetPostModel();
+const User=Schema.GetUserModel();
 
 //back-end
-app.get("/compose", function (req, res) {
-    if (loggedIn != "none") res.render("compose");
+App.get("/compose", function (req, res) {
+    if (LoggedIn != "none") res.render("compose");
     else res.redirect("/login");
 });
-app.post("/compose", function (req, res) {
-    if (loggedIn != "none") {
+App.post("/compose", function (req, res) {
+    if (LoggedIn != "none") {
         let user;
         User.find({
-            email: loggedIn
+            email: LoggedIn
         }, function (err, users) {
             if (!err) {
                 user = users[0];
@@ -79,7 +39,7 @@ app.post("/compose", function (req, res) {
                     title: req.body.title,
                     content: req.body.content,
                     tag: req.body.tag,
-                    time: getdate(),
+                    time: date.GetDate(),
                     author: user.name
                 });
                 if (req.body.sendAdmin == "") {
@@ -89,6 +49,7 @@ app.post("/compose", function (req, res) {
                             console.log("sent to admin");
                             res.redirect("/compose");
                         }else{
+                            console.log(err1);
                             console.log("Not sent to admin");
                         }
                     });
@@ -106,6 +67,6 @@ app.post("/compose", function (req, res) {
 
 
 //port
-app.listen(3000, function () {
+App.listen(3000, function () {
     console.log("server started successfully");
 });
