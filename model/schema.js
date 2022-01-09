@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const Mongoose = require("mongoose");
 //connect to mongoose port
-mongoose.connect("mongodb://localhost:27017/blogDB",{
+Mongoose.connect("mongodb://localhost:27017/blogDB",{
     useNewUrlParser:true
 });
 //post-schema
-const postSchema = new mongoose.Schema({
+const PostSchema = new Mongoose.Schema({
 title: {
     type: String,
     required: true
@@ -28,7 +28,7 @@ author: {
 }
 });
 //user-schema
-const userSchema = new mongoose.Schema({
+const UserSchema = new Mongoose.Schema({
 name: {
     type: String,
     required: true
@@ -44,15 +44,15 @@ password: {
 posts: [String]
 });
 //functions
-exports.getPostModel= function(){
-    const Post = mongoose.model("Post", postSchema);
+exports.GetPostModel= function(){
+    const Post = Mongoose.model("Post", PostSchema);
     return Post;
 }
-exports.getPendingPostModel=function(){
-    const PendingPost = mongoose.model("PendingPost", postSchema);
+exports.GetPendingPostModel=function(){
+    const PendingPost = Mongoose.model("PendingPost", PostSchema);
     return PendingPost;
 }
-exports.getUserModel=function(){
-    const User = mongoose.model("User", userSchema);
+exports.GetUserModel=function(){
+    const User = Mongoose.model("User", UserSchema);
     return User; 
 }
