@@ -1,5 +1,5 @@
-const date = require("dateformat");
+const Date = require("dateformat");
 
-exports.getdate = function () {
-    return date("dd mmmm yyyy");
+exports.GetDate = function () {
+    return Date("dd mmmm yyyy");
 }
