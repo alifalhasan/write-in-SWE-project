@@ -18,9 +18,9 @@ const { PostSchema, UserSchema } = require("./model/dbschema");
 
 
 /**
- * importing PendingPosts method
+ * importing PendingPost method
  */
-const { PendingPosts } = require("./model/pendingpost");
+const { PendingPost } = require("./model/pendingpost");
 
 
 /**
@@ -212,7 +212,13 @@ App.get("/admin", (req, res) => {
  *          type: array
 */
 App.get("/admin/:type", (req, res) => {
-    if (loggedIn == adminid) PendingPosts(); //Renders all the pending posts
+    if (loggedIn == adminid) {
+        res.render("admin", {
+            selectedPanel: "PendingBlogs",
+            data: PendingPost(),
+          });
+        
+    }
 });
 
 /**
