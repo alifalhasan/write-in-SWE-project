@@ -109,9 +109,14 @@ App.post("/compose", function (req, res) {
     }
 
 });
+
+
+
+
+
 /**
  * @swagger
- * //admin/PendingBlogsOpen:
+ * /admin/PendingBlogsOpen:
  *   get:
  *     description: Opens a blog from admin panel's pending posts list
  *     responses:
@@ -127,16 +132,63 @@ App.get("/admin/PendingBlogsOpen", function (req, res) {
         if (!err) {
             const Post = posts[0];
             res.render("open_pending_blog", {
-                post: Post
+                post: Post,
+                alertSuccess : "none",
+                alertFailed : "none",
+                postId : Id
             });
         }
     });
 });
-App.post("/admin/SendReview", function (req, res) {
+
+
+
+/**
+ * @swagger
+ * /admin/PendingBlogsOpen:
+ *    post:
+ *     description: Admin written review will be sent to database 
+ *     responses:
+ *       200:
+ *         description: Success
+ * 
+ */
+App.post("/admin/PendingBlogsOpen", function (req, res) {
+    const Review = req.body.review;
+    const PostId = req.body.send.toString();
+    PendingPost.findById(PostId,function(error,post){
+        if(!error) {
+            const Post=post;
+            var alertFailed = "none",alertSuccess = "none";
+            if(Post.length==0) alertFailed="block";
+            else alertSuccess = "block";
+            const ReviewPost = new ReviewedPost( {
+                title : Post.title,
+                content : Post.content,
+                tag : Post.tag,
+                time : Post.time,
+                author : Post.author,
+                review : Review
+            });
+            ReviewPost.save(function(error){
+                if(!error){
+                    res.render("open_pending_blog",{
+                        post : Post,
+                        alertSuccess : alertSuccess,
+                        alertFailed : alertFailed,
+                        postId : Post.id
+                    });
+                } else {
+                    console.log(error);
+                }
+            });
+            
+        }
+        else console.log(error);
+    });
     
 });
 
-//**
 
 //server port
 App.listen(3000, function () {
