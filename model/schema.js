@@ -32,6 +32,36 @@ author: {
 }
 });
 
+//Definiion of reveiwedPost schema
+const ReviewedPostSchema = new Mongoose.Schema({
+title: {
+    type: String,
+    required: true
+},
+content: {
+    type: String,
+    required: true
+},
+tag: {
+    type: String,
+    required: true
+},
+time: {
+    type: String,
+    required: true
+
+},
+author: {
+    type: String,
+    required: true
+},
+review: {
+    type: String,
+    required : true
+    
+}
+});
+
 
 
 //Definition of user-schema
@@ -71,4 +101,10 @@ exports.GetPendingPostModel=function(){
 exports.GetUserModel=function(){
     const User = Mongoose.model("User", UserSchema);
     return User; 
+}
+
+//this function returns Reviewd Post model
+exports.GetReviewedPostModel=function(){
+    const Post = Mongoose.model("ReviewedPost", ReviewedPostSchema);
+    return Post;
 }
