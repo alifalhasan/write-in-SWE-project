@@ -4,9 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
     <meta name="author" content="Mehedi Hasan">
-    <meta name="generator" content="Hugo 0.80.0">
     <title><%=post.title%></title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -46,14 +44,20 @@
             </div><!-- /.blog-main -->
         </div>
         
-        <form action="/admin/SendReview" method="post">
+        <form action="/admin/PendingBlogsOpen" method="post">
         <div class="form-group">
         <div class="mb-3">
         <label for="blog" class="form-label">Add Review</label>
-        <textarea name="review" class="form-control" rows="2"></textarea>
+        <textarea name="review" class="form-control" rows="2" required></textarea>
         </div>
         <div class="mb-3">
-        <button class="btn btn-outline-success btn-sm" name="postReview" value="">Send Review</button>
+        <div class="alert alert-success" role="alert" style="display:<%=alertSuccess%>;">
+                Review Sent Successfully!!
+        </div>
+        <div class="alert alert-danger" role="alert" style="display:<%=alertFailed%>;">
+                Your Review can not be Empty!!
+        </div>
+        <button class="btn btn-outline-success btn-sm" name="send" value="<%=postId%>">Send Review</button>
         </div>
         </div>
         </form>
