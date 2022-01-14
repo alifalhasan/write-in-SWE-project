@@ -22,7 +22,7 @@ const SwaggerUI=require("swagger-ui-express");
 
 
 //For my Part Implementation only
-const LoggedIn = "mehedi@gmail.com";
+const LoggedIn ="mehedi@gmail.com"; //"admin@gmail.com";//"mehedi@gmail.com";
 const AdminId = "admin@gmail.com",AdminPass = "admin123321";
 
 
@@ -59,6 +59,7 @@ App.use('/api-docs', SwaggerUI.serve, SwaggerUI.setup(SwaggerDocs));
 const PendingPost=Schema.GetPendingPostModel();
 const Post=Schema.GetPostModel();
 const User=Schema.GetUserModel();
+const ReviewedPost=Schema.GetReviewedPostModel();
 
 
 /**
@@ -71,9 +72,9 @@ const User=Schema.GetUserModel();
  *         description: Success
  * 
  */
-App.get("/compose", function (req, res) {
+App.get("/compose",function (req, res) {
     if (LoggedIn != "none") res.render("compose", {
-        sentToAdminSuccess : "none"
+        sentToAdminSuccess : "none",
     });
     else res.redirect("/login");
 });
@@ -108,6 +109,34 @@ App.post("/compose", function (req, res) {
     }
 
 });
+/**
+ * @swagger
+ * //admin/PendingBlogsOpen:
+ *   get:
+ *     description: Opens a blog from admin panel's pending posts list
+ *     responses:
+ *       200:
+ *         description: Success
+ * 
+ */
+App.get("/admin/PendingBlogsOpen", function (req, res) {
+    const Id = "61e0c4b4e985063e1cad07bc"; // Demo pending post
+    PendingPost.find({
+        _id: Id
+    }, function (err, posts) {
+        if (!err) {
+            const Post = posts[0];
+            res.render("open_pending_blog", {
+                post: Post
+            });
+        }
+    });
+});
+App.post("/admin/SendReview", function (req, res) {
+    
+});
+
+//**
 
 //server port
 App.listen(3000, function () {
