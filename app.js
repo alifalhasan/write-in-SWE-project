@@ -20,7 +20,7 @@ const { PostSchema, UserSchema } = require("./model/dbschema");
 /**
  * importing PendingPost method
  */
-const { PendingPost } = require("./model/pendingpost");
+const { PendingPosts } = require("./model/pendingpost");
 
 
 /**
@@ -39,6 +39,18 @@ const { RejectPost } = require("./model/rejectpost");
  * importing OpenPost method
  */
 const { OpenPost } = require("./model/openpost");
+
+
+/**
+ * importing DraftPost method
+ */
+const { DraftPost } = require("./model/draftpost");
+
+
+/**
+ * importing OpenDraftedPost method
+ */
+const { OpenDraftedPost } = require("./model/opendraftedpost");
 
 
 
@@ -251,4 +263,34 @@ App.post("/admin/PendingBlogsReject", (req, res) => {
 */
 App.post("/admin/PendingBlogsOpen", (req, res) => {
     OpenPost();
+});
+
+
+
+
+
+/**
+ * Sprint-2 parts start here
+ */
+
+/**
+ * @swagger
+ * /CreateBlog/AddToDraft:
+ *  post:
+ *   description: Used to add an unfinished blog to draft
+*/
+App.post("/CreateBlog/AddToDraft", (req, res) => {
+    DraftPost();
+});
+
+
+
+/**
+ * @swagger
+ * /CreateBlog/OpenDraftedPost:
+ *  post:
+ *   description: Used to open an unfinished blog from draft
+*/
+App.post("/CreateBlog/OpenDraftedPost", (req, res) => {
+    OpenDraftedPost();
 });
